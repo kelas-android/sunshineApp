@@ -1,5 +1,7 @@
 package net.ruangtedy.java.android.sunshine.model;
 
+import android.text.format.Time;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -95,6 +97,8 @@ public class Data {
 		this.rain = rain;
 	}
 	public String getDatestr() {
+
+
 		Date time=new java.util.Date((long)dt*1000);
 
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm:ss a",Locale.ENGLISH);
