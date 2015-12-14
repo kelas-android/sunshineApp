@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import net.ruangtedy.java.android.sunshine.model.Data;
 import net.ruangtedy.java.android.sunshine.model.WeatherResult;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -57,7 +58,7 @@ public class ForecastFragment extends Fragment {
         int id=item.getItemId();
         if(id==R.id.action_refresh){
             FetchWeatherTask weatherTask=new FetchWeatherTask();
-            weatherTask.execute("94043");
+            weatherTask.execute("Tangerang");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -122,19 +123,22 @@ public class ForecastFragment extends Fragment {
             Log.v(LOG_TAG,"lalala");
 
             int numDays=7;
+            String units="metric";
             try {
 
 
 
                 //URL url=new URL("http://api.openweathermap.org/data/2.5/forecast?q=London&appid=2de143494c0b295cca9337e1e96b00e0");
-                final String FORECAST_BASE_URL="http://api.openweathermap.org/data/2.5/forecast?";
+                final String FORECAST_BASE_URL="http://api.openweathermap.org/data/2.5/forecast/daily?";
                 final String QUERY_PARAM="q";
                 final String APPID_PARAM="APPID";
                 final String DAYS_PARAM = "cnt";
+                final String PARAM_UNITS="units";
 
                 Uri builtUri= Uri.parse(FORECAST_BASE_URL).buildUpon()
                         .appendQueryParameter(QUERY_PARAM,params[0])
                         .appendQueryParameter(DAYS_PARAM,Integer.toString(numDays))
+                        .appendQueryParameter(PARAM_UNITS,units)
                         .appendQueryParameter(APPID_PARAM, "2de143494c0b295cca9337e1e96b00e0")
                         .build();
                 Log.v(LOG_TAG,"Built URI"+builtUri);
@@ -199,6 +203,22 @@ public class ForecastFragment extends Fragment {
             }
 
 
+
+        }
+
+        @Override
+        protected void onPostExecute(WeatherResult weatherResult) {
+            if(weatherResult!=null){
+                mForecastAdapter.clear();
+                for(Data data:weatherResult.getList()){
+                    String str=data.getDatestr()+" "+data.getWeather().get(0).getMain();
+                    mForecastAdapter.add(str);
+
+
+
+                }
+
+            }
 
         }
     }

@@ -1,17 +1,30 @@
 package net.ruangtedy.java.android.sunshine.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+@JsonIgnoreProperties("datestr")
 public class Data {
 	private int dt;
+	private Temperature temp;
 	private Main main;
+	private double pressure;
+	private int humidity;
+	private double speed;
+	private double deg;
+	@JsonProperty("clouds")
+	private double clouds;
+	private double rain;
+
 	private List<Weather> weather;
-	private Clouds clouds;
 	private Wind wind;
-	private Rain rain;
-	private Snow snow;
-	private Sys2 sys;
-	private String dt_txt;
+	private String datestr;
+
 	public int getDt() {
 		return dt;
 	}
@@ -30,48 +43,70 @@ public class Data {
 	public void setWeather(List<Weather> weather) {
 		this.weather = weather;
 	}
-	public Clouds getClouds() {
-		return clouds;
-	}
-	public void setClouds(Clouds clouds) {
-		this.clouds = clouds;
-	}
+
 	public Wind getWind() {
 		return wind;
 	}
 	public void setWind(Wind wind) {
 		this.wind = wind;
 	}
-	public Rain getRain() {
+
+
+	public Temperature getTemp() {
+		return temp;
+	}
+	public void setTemp(Temperature temp) {
+		this.temp = temp;
+	}
+	public double getPressure() {
+		return pressure;
+	}
+	public void setPressure(double pressure) {
+		this.pressure = pressure;
+	}
+	public int getHumidity() {
+		return humidity;
+	}
+	public void setHumidity(int humidity) {
+		this.humidity = humidity;
+	}
+	public double getSpeed() {
+		return speed;
+	}
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+	public double getDeg() {
+		return deg;
+	}
+	public void setDeg(double deg) {
+		this.deg = deg;
+	}
+	public double getClouds() {
+		return clouds;
+	}
+	public void setClouds(double clouds) {
+		this.clouds = clouds;
+	}
+	public double getRain() {
 		return rain;
 	}
-	public void setRain(Rain rain) {
+	public void setRain(double rain) {
 		this.rain = rain;
 	}
+	public String getDatestr() {
+		Date time=new java.util.Date((long)dt*1000);
 
-	public Sys2 getSys() {
-		return sys;
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm:ss a",Locale.ENGLISH);
+		datestr=df.format(time);
+		return datestr;
 	}
-	public void setSys(Sys2 sys) {
-		this.sys = sys;
-	}
-	public String getDt_txt() {
-		return dt_txt;
-	}
-
-
-
-	public void setDt_txt(String dt_txt) {
-		this.dt_txt = dt_txt;
+	public void setDatestr(String datestr) {
+		this.datestr = datestr;
 	}
 
-	public Snow getSnow() {
-		return snow;
-	}
 
-	public void setSnow(Snow snow) {
-		this.snow = snow;
-	}
-	
+
+
 
 }
