@@ -1,7 +1,10 @@
 package net.ruangtedy.java.android.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -53,8 +56,33 @@ public class MainActivity extends AppCompatActivity {
             Log.v("MainActivity", "action seting called");
             startActivity(intent);
             return  true;
+        }if(id==R.id.action_map){
+            openPreferredLocationMap();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+        private void openPreferredLocationMap(){
+            SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+            String location=sharedPreferences.getString(
+                    getString(R.string.pref_location_key),
+                    getString(R.string.pref_default_location)
+            );
+            Uri geolocation= Uri.parse("geo:0,0?").buildUpon()
+                    .appendQueryParameter("q", location)
+                    .build();
+
+            Intent intent=new Intent(Intent.ACTION_VIEW);
+            intent.setData(geolocation);
+
+            if(intent.resolveActivity(getPackageManager())!=null){
+                startActivity(intent);
+            }else
+            {
+                Log.d("MainActivity", "could call"+location+"no receiving app installed");
+            }
+
     }
 }
