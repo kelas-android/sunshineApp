@@ -32,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -236,12 +237,25 @@ public class ForecastFragment extends Fragment {
 
         }
 
+        private Double convertTemperature(double celcius){
+            SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String unitType=sharedPreferences.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_metric));
+            DecimalFormat df = new DecimalFormat("#.00");
+            if(unitType.equals(getString(R.string.pref_units_imperial))){
+                Double farenheit=(celcius*1.8)+32;
+                return  Double.valueOf(df.format(farenheit));
+            }else if(!unitType.equals(getString(R.string.pref_units_metric))){
+                Log.d(LOG_TAG, "unit Type not found");
+            }
+            return celcius;
+        }
         @Override
         protected void onPostExecute(WeatherResult weatherResult) {
             if(weatherResult!=null){
                 mForecastAdapter.clear();
                 for(Data data:weatherResult.getList()){
-                    String str=data.getDatestr()+" "+data.getWeather().get(0).getMain();
+                    String str=data.getDatestr()+" "+data.getWeather().get(0).getMain()+" "+
+                            convertTemperature(data.getTemp().getMax())+"/"+convertTemperature(data.getTemp().getMin());
                     mForecastAdapter.add(str);
 
 
